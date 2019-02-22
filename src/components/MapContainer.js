@@ -147,7 +147,7 @@ const MapContainer = compose(
           let items = [];
           
           this.props.data.map((item, index) => {
-              if (item.place != null && item.place == place) {
+              if (item.labels.length > 0 && item.place == place) {
                 items.push(<p style={{textAlign: "right"}} dir="rtl" key={`item${index}`}>{item.question}</p>)
               }
               return;

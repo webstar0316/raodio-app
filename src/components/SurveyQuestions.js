@@ -105,13 +105,13 @@ const SurveyQuestions = (props) => {
                     value3={answers.trivia1.wrong_answer1}
                     value4={answers.trivia1.wrong_answer2}
                     value5={answers.trivia1.wrong_answer3}
-                />                           
+                />
 
                 <TextArea
                     question={questions.EDIT_TEXT}
                     handleTextInput={(e) => handleAnswer('story', e)}
                     value={answers.story}
-                    rows={'10'}
+                    rows={'2'}
                 />
                                 
                 <Question question={questions.PLACE} />
@@ -124,7 +124,7 @@ const SurveyQuestions = (props) => {
                     post={props.post}
                     data={props.data}
                 />
-                {validator.message('google', answers.place && answers.lat && answers.lon , 'required')}
+                {validator.message('google', answers.place && answers.lat && answers.lon , 'google')}
                
                 <ImgUploader
                     question={questions.PRE_IMG}

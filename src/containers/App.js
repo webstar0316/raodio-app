@@ -13,6 +13,8 @@ import Survey from './Survey';
 import NewForm from './NewForm';
 import Login from './Login';
 import DataTable from './DataTable';
+import SimpleReactValidator from 'simple-react-validator';
+
 
 import '../css/Hidden.css';
 
@@ -31,6 +33,21 @@ class App extends Component {
       newItem: false,
       dbIsFull: false,
     }; // <- set up react state
+
+    this.validator = new SimpleReactValidator({
+      validators: {
+        google: {  // name the rule
+          message: 'אנא הצמידו את האייטם למיקום במאגר שלנו או בגוגל',
+          rule: (val, params, validator) => {
+            return val ? true : false;
+          },
+          required: true
+        }
+      },
+      messages: {
+        required: 'יש למלא שדה זה'
+      }
+    });
   }
 
   setNew = (bool) => {
@@ -158,6 +175,8 @@ class App extends Component {
               placesList={this.state.placesList}
               setNew={this.setNew}
               data={this.state.text}
+              getDataItems={this.getDataItems}
+              validator={this.validator}
             />
           </Top>
 
@@ -224,6 +243,8 @@ class App extends Component {
                       user={submitted ? '' : user.email}
                       submitted={submitted}
                       placesList={this.state.placesList}
+                      validator={this.validator}
+                      data={this.state.text}
                     />
                   </Top>
                 );
