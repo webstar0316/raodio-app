@@ -4,13 +4,21 @@ import moment from 'moment';
 import { runInNewContext } from "vm";
 
 import "react-table/react-table.css";
+import { CommunicationRingVolume } from "material-ui/svg-icons";
 
 class DataTable extends Component {
   constructor(props) {
     super(props);
 
-    this.getFilterData();
+    this.state = {
+      data: []
+    };
     this.renderEditable = this.renderEditable.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(this.props.data);
+    this.getFilterData();
   }
 
   componentDidUpdate(prevProps) {
@@ -25,11 +33,11 @@ class DataTable extends Component {
       if (item.writer_username === this.props.user)
         data.push(item);
     });
-
-    this.state = {
+    
+    this.setState({
       data,
       editRow: null
-    };
+    });
   }
    
   renderEditable(cellInfo) {
@@ -52,6 +60,7 @@ class DataTable extends Component {
     }
     return <div>{cellInfo.value}</div>
   }
+ 
 
   render() {
     const { data } = this.state;
@@ -59,6 +68,8 @@ class DataTable extends Component {
       <div style={{textAlign: "right", direction: "rtl"}}>
         <ReactTable
           resizable={false}
+          loading={this.props.tableLoading}
+          loadingText={'ˈlōdiNG...'}
           data={data}
           columns={[{
               Header: "Question",

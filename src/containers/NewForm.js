@@ -168,7 +168,6 @@ class NewForm extends Component {
         this.updatePostInDB(toDB[i]);
       }
     }
-    this.props.getDataItems();
   }
 
   pushIfExist = (pushThere, pushThat, isArr = false) => {
@@ -182,7 +181,6 @@ class NewForm extends Component {
   }
 
   updatePostInDB = (data) => {
-
     if (this.isEmpty(data)) {
       const id = 'negative';
       this.showEl(id, () => document.getElementById(id).style.display = 'none');
@@ -203,6 +201,7 @@ class NewForm extends Component {
         body: toDB
       }).then(res => {
           console.log('Status: ', res.status);
+          this.props.getDataItems();
         })
         .catch(error => console.error('Error: ', error));
 

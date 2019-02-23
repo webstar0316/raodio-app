@@ -15,7 +15,6 @@ import Login from './Login';
 import DataTable from './DataTable';
 import SimpleReactValidator from 'simple-react-validator';
 
-
 import '../css/Hidden.css';
 
 class App extends Component {
@@ -32,6 +31,7 @@ class App extends Component {
       user: {},
       newItem: false,
       dbIsFull: false,
+      tableLoading: false,
     }; // <- set up react state
 
     this.validator = new SimpleReactValidator({
@@ -127,6 +127,7 @@ class App extends Component {
 
   getDataItems = () => {
     this.authListener(); // <--- FIREBASE DB
+    this.setState({ tableLoading: true });
     let headers = new Headers();
     headers.set('Authorization', 'Basic ' + btoa(gcp_config.username + ":" + gcp_config.password));
     fetch('https://roadio-master.appspot.com/v1/get_places?limit=-1')
@@ -134,7 +135,8 @@ class App extends Component {
       .then(placeData => this.setState({ placesList: placeData }, () => {
         fetch('https://roadio-master.appspot.com/v1/get_user_items?user_id=management_user&limit=-1', { method: 'GET', headers: headers, })
           .then(response => response.json())
-          .then(data => this.setState({ text: data.items }, () => {
+          .then(data => this.setState({ text: data.items, tableLoading: false }, () => {
+            console.log('data item set finish');
             this.setState({ dbIsFull: true });
           }));
       }));
@@ -175,8 +177,8 @@ class App extends Component {
               placesList={this.state.placesList}
               setNew={this.setNew}
               data={this.state.text}
-              getDataItems={this.getDataItems}
               validator={this.validator}
+              getDataItems={this.getDataItems}
             />
           </Top>
 
@@ -189,7 +191,7 @@ class App extends Component {
         hideMessage = true;
         hideDiv = false;
       }
-
+      
       return (
         <div>
           <Router>
@@ -260,8 +262,9 @@ class App extends Component {
                     </div>
 
                     <DataTable
-                      data={this.state.text}
                       user={user.email}
+                      data={this.state.text}
+                      tableLoading={this.state.tableLoading}
                     />
                     
                     <Survey postNum={number}

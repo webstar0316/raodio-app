@@ -111,7 +111,7 @@ const SurveyQuestions = (props) => {
                     question={questions.EDIT_TEXT}
                     handleTextInput={(e) => handleAnswer('story', e)}
                     value={answers.story}
-                    rows={'2'}
+                    rows={'10'}
                 />
                                 
                 <Question question={questions.PLACE} />
