@@ -18,7 +18,8 @@ const SurveyQuestions = (props) => {
         questions: {
             PLACE: 'מיקום קשור',
             TITLE: 'כותרת שאלה / תגיות',
-            GROUP: 'מקבצים',
+            IS_GROUP: 'קבוצתי',
+            GROUPS: 'מקבצים',
             PRE_IMG: 'תמונה בזמן שאלה',
             POST_IMG: 'תמונה בזמן תשובה',
             DIFFICULTY: 'רמת קושי שאלה',
@@ -120,6 +121,9 @@ const SurveyQuestions = (props) => {
                 <Question question={questions.PLACE} />
                 <MapContainer
                     handleAnswer={(place) => handleAnswerPlace(place)}
+                    handleCheck={(e) => handleCheck('is_group', e)}
+                    checkQuestion={questions.IS_GROUP}
+                    checked={answers.is_group}
                     placesList={props.placesList}
                     answer={answers.place}
                     changed={props.changed}
@@ -129,7 +133,6 @@ const SurveyQuestions = (props) => {
                     isFormMap={true}
                     showCurrentMarker
                 />
-
                 {validator.message('google', answers.place && answers.lat && answers.lon , 'google')}
                 
                 <ImgUploader
@@ -151,7 +154,7 @@ const SurveyQuestions = (props) => {
                 />
                 
                 <TextArea
-                    question={questions.GROUP}
+                    question={questions.GROUPS}
                     handleTextInput={(e) => handleAnswerArray('groups', e.target.value)}
                     value={answers.groups ? answers.groups[answers.groups.length - 1] : ''}
                 />

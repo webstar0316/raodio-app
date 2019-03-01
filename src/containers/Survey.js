@@ -236,7 +236,7 @@ class Survey extends Component {
   static getDerivedStateFromProps(props, state) {
     // console.log("DELIVER ANSWERS: ", state.answers);
 
-    if(state.answers.datastore_id !== props.post.datastore_id){
+    if(state.answers && state.answers.datastore_id !== props.post.datastore_id){
       return { answers: props.submitted ? '' : state.setNewFields(props.post), changedForMap: true};
     }
     if (state.changed) {
@@ -251,7 +251,7 @@ class Survey extends Component {
 
     return submitted ? (
       <button className={numberOfPreviousElemnts > 0 ?
-        'ui labeled icon violet basic massive button ' : 'ui labeled icon grey basic massive button disabled'}
+        'ui labeled icon violet basic massive button disabled' : 'ui labeled icon grey basic massive button disabled'}
         style={{ margin: '30px 35%' }}
         onClick={this.showPrev}>
         <i className="arrow left icon"></i>
@@ -276,7 +276,7 @@ class Survey extends Component {
             justifyContent: 'space-between',
           }}>
             <button className={numberOfPreviousElemnts > 0 ?
-              'ui labeled icon violet basic button ' : 'ui labeled icon grey basic button disabled'}
+              'ui labeled icon violet basic button disabled' : 'ui labeled icon grey basic button disabled'}
               style={{ margin: '30px' }}
               onClick={this.showPrev}>
               <i className="arrow left icon"></i>

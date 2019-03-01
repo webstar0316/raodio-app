@@ -153,6 +153,7 @@ class NewForm extends Component {
           newAn.answers = pushIfExist(newAn.answers, tr['wrong_answer1'], true);
           newAn.answers = pushIfExist(newAn.answers, tr['wrong_answer2'], true);
           newAn.answers = pushIfExist(newAn.answers, tr['wrong_answer3'], true);
+          newAn.assigned_user = 'weberr@outlook.com';
 
           if (sent)
             delete newAn.datastore_id;
@@ -226,13 +227,14 @@ class NewForm extends Component {
           this.setState({ showModal: true });
           return this.readAllChunks(res.body);
         }
-        this.props.getDataItems();
-        this.showEl('success', () => { this.props.setNew(false) });
+        this.props.getDataItems();        
       })
       .then(chunks => {        
         chunks && this.setState({ errorMsg: String.fromCharCode.apply(null, chunks[0]) });
       })
       .catch(error => console.error('Error: ', error));
+
+      this.showEl('success', () => { this.props.setNew(false) });
     }
   }
 

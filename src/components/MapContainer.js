@@ -13,6 +13,7 @@ import {
 import { InfoWindow } from "react-google-maps";
 import { SearchBox } from "react-google-maps/lib/components/places/SearchBox";
 import markerIcon from "../img/bluemapicon.png";
+import Checkbox from './Checkbox';
 
 let defaultLat = 36;
 let defaultLon = 32;
@@ -292,6 +293,8 @@ const MapContainer = compose(
             changeToFalse={props.changeToFalse}
             />
           </div>
+          <Checkbox question={props.checkQuestion} checked={props.checked}
+              handleCheck={(e) => props.handleCheck(e)} />
         </div>
       )}
   </div>);

@@ -73,7 +73,7 @@ class App extends Component {
   showPrev = (e) => {
     e.preventDefault();
     this.hideEl('negative', true);
-    let temporaryList = this.state.previosIndexList;
+    let temporaryList = this.state.previosIndexList;    
     if (temporaryList.length > 0) {
       let previosElement = temporaryList.pop();
       this.setState({ post: previosElement, previosIndexList: temporaryList, previosDatascore_id: this.state.text[previosElement].datastore_id });
@@ -103,6 +103,7 @@ class App extends Component {
     for (let i = post + 1, size = Object.values(text).length; i < size; i++) {
       if ((text[i].assigned_user === this.state.user.email)
          && text[i].submission_time === null) {
+        console.log("###assigned-ok: ", i);
         return i;
       }
     }
@@ -242,14 +243,16 @@ class App extends Component {
 
                 }
                 isNextElementExist = this.findNextUnsubmitedElement(number) !== undefined;
+                if(!hideMessage) string = "/";
                 return (
                   <Top user={user.email} itemId={itemId} setNew={() => this.setNew(true)} >
                     <Redirect to={string} />
                     <Message className={hideMessage ? 'hidden' : ''} color='green' icon='check icon'
                       text1='מצטערים' text2='כל הפוסטים כבר נבדקו' />
                     <div className={hideDiv ? 'hidden' : ''}>
-                      <Text text={0 ? '' : text[number].raw_text} heading={hideDiv ? '' : text[number].place} />
-                    </div>                    
+                      <Text text={text[number] && text[number].raw_text && !hideDiv ? text[number].raw_text : '' } heading={hideDiv ? '' : text[number].place} />
+                    </div>
+
                     <Survey postNum={number}
                       showPrev={this.showPrev} showNext={this.showNext} showEl={this.showEl}
                       numberOfPreviousElemnts={previosIndexList.length}
@@ -267,12 +270,12 @@ class App extends Component {
               }} />
               <Route path={"/"} exact render={() => {
                 let string = "/" + (text[number] === undefined ? "" : text[number].datastore_id);
-
+                         
                 return (
                   <Top user={user.email} itemId={itemId} setNew={() => this.setNew(true)} >
                     <Redirect to={string} />
                     <div className={hideDiv ? 'hidden' : ''}>
-                      <Text text={hideDiv ? '' : text[number].raw_text} heading={hideDiv ? '' : text[number].place} />
+                      <Text text={text[number] && text[number].raw_text && !hideDiv ? text[number].raw_text : '' } heading={hideDiv ? '' : text[number].place} />
                     </div>
 
                     <DataTable
