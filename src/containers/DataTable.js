@@ -17,7 +17,6 @@ class DataTable extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.data);
     this.getFilterData();
   }
 
@@ -26,16 +25,9 @@ class DataTable extends Component {
     this.getFilterData();
   }
 
-  getFilterData() {
-    let data = [];
-    if (!this.props.data) return;
-    this.props.data.map((item) => {
-      if (item.writer_username === this.props.user)
-        data.push(item);
-    });
-    
+  getFilterData() { 
     this.setState({
-      data,
+      data: this.props.data,
       editRow: null
     });
   }
@@ -94,26 +86,16 @@ class DataTable extends Component {
               width: 250
             }, {
               Header: "Modified Date",
-              accessor: "last_modified",
+              id: "last_modified",
+              accessor: original => new Date(original.last_modified),
               Cell: ({row}) => {
                 return (
                 <div>
-                  {row.last_modified ? moment(row.last_modified).format("YYYY/MM/DD hh:mm:ss") : ""}
+                  {row.last_modified ? moment(row.last_modified).format("YYYY/MM/DD HH:mm:ss") : ""}
                 </div>
                 )
                 },
               sortable:true,
-              sortMethod: (a, b) => {
-                if (!a) return -1;
-                if (!b) return 1;
-                a = moment(a).format("YYYY/MM/DD hh:mm:ss");
-                b = moment(b).format("YYYY/MM/DD hh:mm:ss");
-                if (a > b)
-                  return 1;
-                if (a < b)
-                  return -1;
-                return 0;
-              },
               width: 250
             }, {
               Header: '',

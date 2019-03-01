@@ -16,6 +16,7 @@ import DataTable from './DataTable';
 import SimpleReactValidator from 'simple-react-validator';
 
 import '../css/Hidden.css';
+import MapContainer from '../components/MapContainer';
 
 class App extends Component {
 
@@ -24,6 +25,7 @@ class App extends Component {
     this.state = {
       post: 0,
       text: [],
+      userText: [],
       placesList: [],
       previosIndexList: [],
       previosIndex: undefined,
@@ -47,7 +49,7 @@ class App extends Component {
       messages: {
         required: 'יש למלא שדה זה'
       }
-    });
+    });    
   }
 
   setNew = (bool) => {
@@ -97,9 +99,10 @@ class App extends Component {
 
   findNextUnsubmitedElement = (post) => {
     const { text } = this.state;
+
     for (let i = post + 1, size = Object.values(text).length; i < size; i++) {
       if ((text[i].assigned_user === this.state.user.email)
-        && text[i].submission_time === null) {
+         && text[i].submission_time === null) {
         return i;
       }
     }
@@ -125,6 +128,17 @@ class App extends Component {
     }
   }
 
+  getUserDataItems = () => {
+    let data = [];
+    
+    this.state.text && this.state.text.map((item) => {
+      if (this.state.user && item.writer_username === this.state.user.email)
+        data.push(item);
+    });
+
+    this.setState({ userText: data });
+  }
+
   getDataItems = () => {
     this.authListener(); // <--- FIREBASE DB
     this.setState({ tableLoading: true });
@@ -136,7 +150,8 @@ class App extends Component {
         fetch('https://roadio-master.appspot.com/v1/get_user_items?user_id=management_user&limit=-1', { method: 'GET', headers: headers, })
           .then(response => response.json())
           .then(data => this.setState({ text: data.items, tableLoading: false }, () => {
-            console.log('data item set finish');
+            // console.log('data item set finish');
+            this.getUserDataItems();
             this.setState({ dbIsFull: true });
           }));
       }));
@@ -234,8 +249,7 @@ class App extends Component {
                       text1='מצטערים' text2='כל הפוסטים כבר נבדקו' />
                     <div className={hideDiv ? 'hidden' : ''}>
                       <Text text={0 ? '' : text[number].raw_text} heading={hideDiv ? '' : text[number].place} />
-                    </div>
-
+                    </div>                    
                     <Survey postNum={number}
                       showPrev={this.showPrev} showNext={this.showNext} showEl={this.showEl}
                       numberOfPreviousElemnts={previosIndexList.length}
@@ -262,11 +276,15 @@ class App extends Component {
                     </div>
 
                     <DataTable
-                      user={user.email}
-                      data={this.state.text}
+                      data={this.state.userText}
                       tableLoading={this.state.tableLoading}
                     />
-                    
+
+                    <MapContainer
+                      data={this.state.userText}
+                      isFormMap={false}
+                    />
+
                     <Survey postNum={number}
                       showPrev={this.showPrev} showNext={this.showNext} showEl={this.showEl}
                       numberOfPreviousElemnts={previosIndexList.length}
@@ -276,6 +294,8 @@ class App extends Component {
                       user={submitted ? '' : user.email}
                       submitted={submitted}
                       placesList={this.state.placesList}
+                      validator={this.validator}
+                      data={this.state.text}
                     />
                   </Top>
                 );
@@ -287,7 +307,11 @@ class App extends Component {
     }
     else {
       return (
-        <Login showEl={this.showEl} hideEl={this.hideEl} />
+        <Login
+          showEl={this.showEl}
+          hideEl={this.hideEl}
+          getDataItems={() => this.getDataItems()}
+        />
       )
     }
   }
