@@ -163,7 +163,9 @@ const MapContainer = compose(
 	    })
     },
     componentDidUpdate(prevProps){
-      if (this.props.data === prevProps.data) return;
+      console.log("update passed!");
+      if (this.props === prevProps) return;
+      console.log("update prev passed!");
       this.getQuestionMarkers();
       // console.log(this.props.placesList);
       if(this.props.isFormMap && this.props.changed){
@@ -175,11 +177,17 @@ const MapContainer = compose(
           newmarker.position = new google.maps.LatLng(parseFloat(this.props.post.lat), parseFloat(this.props.post.lon));
           let markers = [newmarker];
           this.setState({center: newCentr, markers: markers, currentPlace: {place_name: this.props.post.place, lat: this.props.post.lat, lon: this.props.post.lon}});
+          console.log("updateMap:", newCentr);
         }
         else{
           this.setState({markers: [], currentPlace: { place_name: null, lat: undefined, lon: undefined}});
         }
       }
+    },
+    componentWillReceiveProps(nextProps) {
+      console.log("recev passed!");
+      if (this.props.data === nextProps.data) return;
+
     },
     getQuestionMarkers() {
       let questionMarkers = [];

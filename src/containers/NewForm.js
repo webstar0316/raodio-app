@@ -153,7 +153,7 @@ class NewForm extends Component {
           newAn.answers = pushIfExist(newAn.answers, tr['wrong_answer1'], true);
           newAn.answers = pushIfExist(newAn.answers, tr['wrong_answer2'], true);
           newAn.answers = pushIfExist(newAn.answers, tr['wrong_answer3'], true);
-          newAn.assigned_user = 'weberr@outlook.com';
+          //newAn.assigned_user = "weberr@outlook.com";
 
           if (sent)
             delete newAn.datastore_id;
@@ -215,7 +215,7 @@ class NewForm extends Component {
 
       const toDB = JSON.stringify({ item: data });
       console.log("SAVE NEW ITEM: ", toDB);
-
+  
       fetchStream('https://roadio-master.appspot.com/v1/edit_item', {
         method: 'POST',
         headers: headers,
@@ -227,14 +227,13 @@ class NewForm extends Component {
           this.setState({ showModal: true });
           return this.readAllChunks(res.body);
         }
-        this.props.getDataItems();        
+        this.props.getDataItems();
+        this.showEl('success', () => { this.props.setNew(false) });
       })
       .then(chunks => {        
         chunks && this.setState({ errorMsg: String.fromCharCode.apply(null, chunks[0]) });
       })
       .catch(error => console.error('Error: ', error));
-
-      this.showEl('success', () => { this.props.setNew(false) });
     }
   }
 

@@ -86,6 +86,8 @@ class App extends Component {
     let number = this.findNextUnsubmitedElement(post);
     if (number !== undefined) {
       temporaryList.push(post);
+      console.log("number: ", number);
+      console.log("post: ", post);
       this.setState({ post: number, previosIndexList: temporaryList });
     }
   }
@@ -247,12 +249,12 @@ class App extends Component {
                 return (
                   <Top user={user.email} itemId={itemId} setNew={() => this.setNew(true)} >
                     <Redirect to={string} />
-                    <Message className={hideMessage ? 'hidden' : ''} color='green' icon='check icon'
-                      text1='מצטערים' text2='כל הפוסטים כבר נבדקו' />
+                    {/* <Message className={hideMessage ? 'hidden' : ''} color='green' icon='check icon'
+                      text1='מצטערים' text2='כל הפוסטים כבר נבדקו' /> */}
                     <div className={hideDiv ? 'hidden' : ''}>
                       <Text text={text[number] && text[number].raw_text && !hideDiv ? text[number].raw_text : '' } heading={hideDiv ? '' : text[number].place} />
                     </div>
-
+                   
                     <Survey postNum={number}
                       showPrev={this.showPrev} showNext={this.showNext} showEl={this.showEl}
                       numberOfPreviousElemnts={previosIndexList.length}
